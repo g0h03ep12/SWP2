@@ -13,7 +13,7 @@
 #define _DIST_MIN  100.0   // minimum distance 100mm
 #define _DIST_MAX  250.0   // maximum distance 250mm
 
-#define EMA_ALPHA  0.5     // for EMA Filter
+#define EMA_ALPHA  0.7     // for EMA Filter
 
 #define LOOP_INTERVAL 20   // Loop Interval (unit: msec)
 
@@ -59,9 +59,8 @@ void loop()
   }
 
   dist_ema = EMA_ALPHA * dist_raw + (1 - EMA_ALPHA) * dist_prev;
-      
-  //duty = map(dist_ema, _DIST_MIN, _DIST_MAX, _DUTY_MIN, _DUTY_MAX);
-  duty = (dist_ema - _DIST_MIN) * (_DUTY_MAX - _DUTY_MIN) / (_DIST_MAX - _DIST_MIN);
+  
+  duty = _DUTY_MIN + (dist_ema - _DIST_MIN) * (_DUTY_MAX - _DUTY_MIN) / (_DIST_MAX - _DIST_MIN);
   
   myservo.writeMicroseconds(duty);
 
